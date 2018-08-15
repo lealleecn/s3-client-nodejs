@@ -1,0 +1,22 @@
+{
+  "name": "s3-client-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lealleecn/s3-client-nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lealleecn/s3-client-nodejs/issues"
+  },
+  "homepage": "https://github.com/lealleecn/s3-client-nodejs#readme",
+  "dependencies": {
+    "aws-sdk": "^2.293.0"
+  }
+}
