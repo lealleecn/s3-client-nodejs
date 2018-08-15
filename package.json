@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/lealleecn/s3-client-nodejs#readme",
   "dependencies": {
-    "aws-sdk": "^2.293.0"
+    "aws-sdk": "^2.293.0",
+    "express": "^4.16.3",
+    "launch-browser": "^1.0.0"
   }
 }
