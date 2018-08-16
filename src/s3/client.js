@@ -18,12 +18,21 @@ const listObjects = params => {
     });
 };
 
-const listObjectsKeys = params => {
-    return s3.listObjects({
+const listObjectsKeys = (params, initKeys = []) => {
+    console.log('list object keys with params:', params);
+    return s3.listObjectsV2({
         Bucket: params.bucketName,
         Prefix: params.prefix,
-        MaxKeys: params.size
-    }).promise().then(data => data.Contents.map(item => item.Key));
+        MaxKeys: params.size,
+        ContinuationToken: params.continuationToken
+    }).promise().then(data => {
+        const currentRoundKeys = data.Contents.map(item => item.Key);
+        if (data.IsTruncated) {
+            params.continuationToken = data.NextContinuationToken;
+            return listObjectsKeys(params, initKeys.concat(currentRoundKeys));
+        }
+        return initKeys.concat(currentRoundKeys);
+    });
 };
 
 
