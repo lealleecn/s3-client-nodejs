@@ -55,7 +55,17 @@ const loadCaptchas = () => {
     if(!date){
         document.querySelector('#date').value = date = moment().format('YYYYMMDD');
     }
-    fetch(`/list?date=${date}&max=${max}&color=${color}&method=${method}`).then(res => res.json()).then(data => render(data));
+    const searchBtn = document.querySelector('#search');
+    searchBtn.setAttribute('disabled', true);
+    searchBtn.textContent = 'Searching';
+    fetch(`/list?date=${date}&max=${max}&color=${color}&method=${method}`)
+        .then(res => {
+            searchBtn.textContent = 'Search';
+            searchBtn.removeAttribute('disabled');
+            return res;
+        })
+        .then(res => res.json())
+        .then(data => render(data));
 }
 
 loadCaptchas();
