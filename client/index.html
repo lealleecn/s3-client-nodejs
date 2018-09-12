@@ -16,8 +16,9 @@
 <body>
     <div class="query-container">
         <form onsubmit="loadCaptchas();return false;">
-            <span>date: <input id="date" /></span>
-            <span>max: <input id="max" value="1000"/></span>
+            <span>start time: <input id="startTime" /></span>
+            <span>end time: <input id="endTime" /></span>
+            <span>max: <input id="max" value="100"/></span>
             <span>color: 
                 <select id="color">
                     <option value="">ALL</option>
@@ -35,6 +36,7 @@
             </span>
             <span><button id="search" type="submit" >Search</button></span>
         </form>
+        <span><button id="syncData" type="button" onclick="syncData()">Sync Data</button></span>
     </div>
     <div id="root"></div>
     <script type="text/babel" src="./index.js"></script>

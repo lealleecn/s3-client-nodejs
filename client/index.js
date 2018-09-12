@@ -48,17 +48,21 @@ const render = items => {
 }
 
 const loadCaptchas = () => {
-    let date = document.querySelector('#date').value;
+    let startTime = document.querySelector('#startTime').value;
+    let endTime = document.querySelector('#endTime').value;
     const max = document.querySelector('#max').value;
     const color = document.querySelector('#color').value;
     const method = document.querySelector('#method').value;
-    if(!date){
-        document.querySelector('#date').value = date = moment().format('YYYYMMDD');
+    if (!startTime){
+        document.querySelector('#startTime').value = startTime = moment().format('YYYY-MM-DD') + ' 00:00:00';
+    }
+    if (!endTime) {
+        document.querySelector('#endTime').value = endTime = moment().format('YYYY-MM-DD') + ' 23:59:59';
     }
     const searchBtn = document.querySelector('#search');
     searchBtn.setAttribute('disabled', true);
     searchBtn.textContent = 'Searching';
-    fetch(`/list?date=${date}&max=${max}&color=${color}&method=${method}`)
+    fetch(`/list?startTime=${startTime}&endTime=${endTime}&max=${max}&color=${color}&method=${method}`)
         .then(res => {
             searchBtn.textContent = 'Search';
             searchBtn.removeAttribute('disabled');
@@ -66,6 +70,27 @@ const loadCaptchas = () => {
         })
         .then(res => res.json())
         .then(data => render(data));
+}
+
+const syncData = () => {
+    if(window.confirm('确定吗？')){
+        const syncDataBtn = document.querySelector('#syncData');
+        syncDataBtn.setAttribute('disabled', true);
+        syncDataBtn.textContent = 'Syncing';
+        fetch('/syncdata')
+            .then(res => {
+                syncDataBtn.textContent = 'Sync Data';
+                syncDataBtn.removeAttribute('disabled');
+                return res;
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(JSON.stringify(data, null, 2));
+            })
+            .catch(error => {
+                alert(JSON.stringify(error))
+            });
+    }
 }
 
 loadCaptchas();
