@@ -88,8 +88,8 @@ const saveCaptchas = async captchas => {
 }
 
 const searchCaptchas = query => {
-    const sql = `SELECT * FROM captchaSuccess WHERE color LIKE ? AND decodeMethod LIKE ? AND lastModifiedTime BETWEEN ? AND ? LIMIT ? ;`;
-    const params = [`%${query.color}%`, `%${query.method}%`, query.startTime, query.endTime, parseInt(query.max)]
+    const sql = `SELECT * FROM captchaSuccess WHERE color LIKE ? AND decodeMethod LIKE ? AND result LIKE ? AND lastModifiedTime BETWEEN ? AND ? LIMIT ? ;`;
+    const params = [`%${query.color}%`, `%${query.method}%`, `%${query.result}%`, query.startTime, query.endTime, parseInt(query.max)]
     return _executeQuery(sql, params);
 }
 

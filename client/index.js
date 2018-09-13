@@ -53,6 +53,7 @@ const loadCaptchas = () => {
     const max = document.querySelector('#max').value;
     const color = document.querySelector('#color').value;
     const method = document.querySelector('#method').value;
+    const result = document.querySelector('#result').value;
     if (!startTime){
         document.querySelector('#startTime').value = startTime = moment().format('YYYY-MM-DD') + ' 00:00:00';
     }
@@ -62,7 +63,7 @@ const loadCaptchas = () => {
     const searchBtn = document.querySelector('#search');
     searchBtn.setAttribute('disabled', true);
     searchBtn.textContent = 'Searching';
-    fetch(`/list?startTime=${startTime}&endTime=${endTime}&max=${max}&color=${color}&method=${method}`)
+    fetch(`/list?startTime=${startTime}&endTime=${endTime}&max=${max}&color=${color}&method=${method}&result=${result}`)
         .then(res => {
             searchBtn.textContent = 'Search';
             searchBtn.removeAttribute('disabled');

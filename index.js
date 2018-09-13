@@ -10,7 +10,6 @@ app.use(express.static('client'));
 
 app.get('/list', (req, res) => {
     console.log('receive query', req.query)
-    const { startTime, endTime, max, color, method } = req.query;
     return dbClient.searchCaptchas(req.query).then(data => {
         console.log('total from db', data.length);
         res.send(data);
