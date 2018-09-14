@@ -16,26 +16,44 @@
 <body>
     <div class="query-container">
         <form onsubmit="loadCaptchas();return false;">
-            <span>start time: <input id="startTime" /></span>
-            <span>end time: <input id="endTime" /></span>
-            <span>max: <input id="max" value="100"/></span>
-            <span>result: <input id="result" value=""/></span>
-            <span>color: 
-                <select id="color">
-                    <option value="">ALL</option>
-                    <option value="01">红色</option>
-                    <option value="02">黄色</option>
-                    <option value="03">蓝色</option>
-                </select>
-            </span>
-            <span>method: 
-                <select id="method">
-                    <option value="">ALL</option>
-                    <option value="MACHINELEARNING">MACHINELEARNING</option>
-                    <option value="RUOKUAI">RUOKUAI</option>
-                </select>
-            </span>
-            <span><button id="search" type="submit" >Search</button></span>
+            <table class="search-table">
+                <tr>
+                    <td>start time: <input id="startTime" /></td>
+                    <td>end time: <input id="endTime" /></td>
+                    <td>max: <input id="max" value="100" /></td>
+                </tr>
+                <tr>
+                    <td>result: <input id="result" value="" /></td>
+                    <td>result length: <input id="resultLength" value="" /></td>
+                    <td>result char:
+                        <select id="hasChinese">
+                            <option value="">ALL</option>
+                            <option value="1">Contain Chinese</option>
+                            <option value="0">Not Contain Chinese</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>color:
+                        <select id="color">
+                            <option value="">ALL</option>
+                            <option value="01">Red</option>
+                            <option value="02">Yellow</option>
+                            <option value="03">Blue</option>
+                        </select>
+                    </td>
+                    <td>method:
+                        <select id="method">
+                            <option value="">ALL</option>
+                            <option value="MACHINELEARNING">MACHINELEARNING</option>
+                            <option value="RUOKUAI">RUOKUAI</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button id="search" type="submit">Search</button>
+                    </td>
+                </tr>
+            </table>
         </form>
         <span><button id="syncData" type="button" onclick="syncData()">Sync Data</button></span>
     </div>

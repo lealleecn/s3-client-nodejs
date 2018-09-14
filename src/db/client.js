@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const isChinese = require('is-chinese');
+const containsChinese = require('contains-chinese');
 const mysqlConfig = require('../../config-mysql.json');
 
 const createNewConnection = () => mysql.createConnection(mysqlConfig);
@@ -43,7 +44,7 @@ const deleteCharacters = async captchas => {
 
 const insertCaptchas = async captchas => {
     const sql = 'INSERT INTO captchaSuccess VALUES ? ;';
-    const params = captchas.map(item => [item.id, item.key, item.color, item.result, item.decodeMethod, item.captcha, item.lastModifiedTime]);
+    const params = captchas.map(item => [item.id, item.key, item.color, item.result, containsChinese(item.result), item.decodeMethod, item.captcha, item.lastModifiedTime]);
     // const params = captchas.map(item => [item.id, item.key, item.color, item.result, item.decodeMethod, '', item.lastModifiedTime]);
     return _executeQuery(sql, [params]);
 }
@@ -88,8 +89,16 @@ const saveCaptchas = async captchas => {
 }
 
 const searchCaptchas = query => {
-    const sql = `SELECT * FROM captchaSuccess WHERE color LIKE ? AND decodeMethod LIKE ? AND result LIKE ? AND lastModifiedTime BETWEEN ? AND ? LIMIT ? ;`;
-    const params = [`%${query.color}%`, `%${query.method}%`, `%${query.result}%`, query.startTime, query.endTime, parseInt(query.max)]
+    const sql = `SELECT * FROM captchaSuccess 
+                    WHERE color LIKE ? 
+                        AND decodeMethod LIKE ? 
+                        AND result LIKE ? 
+                        AND lastModifiedTime BETWEEN ? AND ? 
+                        ${query.resultLength ? 'AND length(result)=?' : 'AND "" LIKE ?'}
+                        ${query.hasChinese !== '' ? 'AND hasChinese = ?' : 'AND "" LIKE ?'}
+                        LIMIT ? ;`;
+    const params = [`%${query.color}%`, `%${query.method}%`, `%${query.result}%`, query.startTime, query.endTime, 
+        query.resultLength ? parseInt(query.resultLength) : '', query.hasChinese !== '' ? parseInt(query.hasChinese) : '' ,parseInt(query.max)]
     return _executeQuery(sql, params);
 }
 

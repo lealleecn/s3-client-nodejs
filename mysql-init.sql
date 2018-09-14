@@ -6,6 +6,7 @@ CREATE TABLE captchaSuccess
     `key` varchar(22),
     color varchar(2),
     result varchar(10),
+    hasChinese boolean,
     decodeMethod varchar(20),
     captcha text,
     lastModifiedTime datetime
