@@ -1,7 +1,8 @@
 const captchaColorMap = {
-    '01': '红',
-    '02': '黄',
-    '03': '蓝'
+    '': 'ALL',
+    '01': 'Red',
+    '02': 'Yellow',
+    '03': 'Blue'
 };
 
 const captchaTable = items => {
@@ -47,16 +48,20 @@ const render = items => {
     );
 }
 
+const getSeachQuerys = () => ({
+    startTime: document.querySelector('#startTime').value,
+    endTime: document.querySelector('#endTime').value,
+    max: document.querySelector('#max').value,
+    color: document.querySelector('#color').value,
+    method: document.querySelector('#method').value,
+    result: document.querySelector('#result').value,
+    hasChinese: document.querySelector('#hasChinese').value,
+    resultLength: document.querySelector('#resultLength').value
+})
+
 const loadCaptchas = () => {
-    let startTime = document.querySelector('#startTime').value;
-    let endTime = document.querySelector('#endTime').value;
-    const max = document.querySelector('#max').value;
-    const color = document.querySelector('#color').value;
-    const method = document.querySelector('#method').value;
-    const result = document.querySelector('#result').value;
-    const hasChinese = document.querySelector('#hasChinese').value;
-    const resultLength = document.querySelector('#resultLength').value;
-    if (!startTime){
+    let { startTime, endTime, max, color, method, result, hasChinese, resultLength } = getSeachQuerys();
+    if (!startTime) {
         document.querySelector('#startTime').value = startTime = moment().format('YYYY-MM-DD') + ' 00:00:00';
     }
     if (!endTime) {
@@ -65,6 +70,7 @@ const loadCaptchas = () => {
     const searchBtn = document.querySelector('#search');
     searchBtn.setAttribute('disabled', true);
     searchBtn.textContent = 'Searching';
+    window.captchaData = null;
     fetch(`/list?startTime=${startTime}&endTime=${endTime}&max=${max}&color=${color}&method=${method}&result=${result}&hasChinese=${hasChinese}&resultLength=${resultLength}`)
         .then(res => {
             searchBtn.textContent = 'Search';
@@ -72,7 +78,10 @@ const loadCaptchas = () => {
             return res;
         })
         .then(res => res.json())
-        .then(data => render(data));
+        .then(data => {
+            window.captchaData = data;
+            render(data);
+        });
 }
 
 const syncData = () => {
@@ -93,6 +102,37 @@ const syncData = () => {
             .catch(error => {
                 alert(JSON.stringify(error))
             });
+    }
+}
+
+const dataURLtoFile = (dataurl, filename) => {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+}
+
+const getFileName = item => `${captchaColorMap[item.color]}-${item.result}-${item.decodeMethod}.png`;
+
+const downloadImages = () => {
+    if (window.captchaData){
+        const { startTime, endTime, max, color, method, result, hasChinese, resultLength } = getSeachQuerys();
+        const zip = new JSZip();
+        window.captchaData.forEach(item => {
+            const fileName = getFileName(item);
+            zip.file(fileName, dataURLtoFile(`data:image/png;base64,${item.captcha}`, fileName));
+        });
+
+        zip.generateAsync({ type: 'blob' }).then(blob => { 
+            saveAs(blob, `[color:${captchaColorMap[color]}]-[hasChinese:${hasChinese}]-[method:${method}]-[result:${result}]-[resultLength:${resultLength}]-[total:${captchaData.length}].zip`);                          
+        }, function (err) {
+            console.error(err);
+            alert('error, check console error');
+        });
+    } else {
+        alert('there is no displayed capthca')
     }
 }
 

@@ -55,9 +55,12 @@
                 </tr>
             </table>
         </form>
+        <span><button id="downloadImages" type="button" onclick="downloadImages()">download displayed captchas</button></span>
         <span><button id="syncData" type="button" onclick="syncData()">Sync Data</button></span>
     </div>
     <div id="root"></div>
+    <script src="https://cdn.bootcss.com/FileSaver.js/2014-11-29/FileSaver.js"></script>
+    <script src="https://cdn.bootcss.com/jszip/3.1.5/jszip.js"></script>
     <script type="text/babel" src="./index.js"></script>
 </body>
 </html>
