@@ -94,7 +94,7 @@ const searchCaptchas = query => {
                         AND decodeMethod LIKE ? 
                         AND result LIKE ? 
                         AND lastModifiedTime BETWEEN ? AND ? 
-                        ${query.resultLength ? 'AND length(result)=?' : 'AND "" LIKE ?'}
+                        ${query.resultLength ? 'AND char_length(result)=?' : 'AND "" LIKE ?'}
                         ${query.hasChinese !== '' ? 'AND hasChinese = ?' : 'AND "" LIKE ?'}
                         LIMIT ? ;`;
     const params = [`%${query.color}%`, `%${query.method}%`, `%${query.result}%`, query.startTime, query.endTime, 
