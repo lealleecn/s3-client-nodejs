@@ -114,7 +114,7 @@ const dataURLtoFile = (dataurl, filename) => {
     return new File([u8arr], filename, { type: mime });
 }
 
-const getFileName = item => `${captchaColorMap[item.color]}-${item.result}-${item.decodeMethod}.png`;
+const getFileName = item => `${captchaColorMap[item.color]}-${item.result}-${item.id}.png`;
 
 const downloadImages = () => {
     if (window.captchaData){
